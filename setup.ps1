@@ -1,4 +1,6 @@
 # Currently tested and working on WIN10 x64 v20H2
+# Need to open PS as admin and Set-Location to script folder
+# Reg import steps will through error if run in PS ISE
 
 # Set execution policy to allow online PS scripts for this session
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
@@ -36,6 +38,9 @@ Set-ItemProperty $key 'LaunchTo' 1                  # Launch Explorer to "This P
 Set-ItemProperty $key 'AutoCheckSelect' 1           # Show check boxes in explorer
 
 $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
-Set-ItemProperty $key 'SearchbocxTaskbarMode' 0     # Hide search box on taskbar
+Set-ItemProperty $key 'SearchboxTaskbarMode' 0     # Hide search box on taskbar
 
 Stop-Process -processname explorer
+
+# Setup Chocolatey package manager 
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
