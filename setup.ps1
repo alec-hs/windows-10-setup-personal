@@ -44,3 +44,28 @@ Stop-Process -processname explorer
 
 # Setup Chocolatey package manager 
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# Install Apps using Chocolatey
+# GUI Package Manager
+choco install chocolateygui -y
+# Utility Apps
+choco install 7zip putty winscp linkshellextension notepadplusplus powertoys aida64-extreme lastpass treesizefree gyazo cpu-z -y
+choco bin powertoys lastpass -y
+# MS Office Apps
+choco install office365business -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' -y
+choco bin office365business -y
+# Storage Apps
+choco install dropbox -y
+choco bin dropbox -y
+# Programming Apps
+choco install vscode github-desktop -y
+choco bin vscode github-desktop -y
+# Browsers
+choco install googlechrome firefox -y
+choco bin googlechrome firefox -y
+# Media Apps
+choco install vlc spotify audacity adobe-creative-cloud -y
+choco bin spotify adobe-creative-cloud -y
+# Gaming Apps
+choco install steam discord geforce-experience teamspeak uplay discord -y
+choco bin steam discord geforce-experience teamspeak uplay discord -y
