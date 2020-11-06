@@ -3,27 +3,35 @@
 # Reg import steps will through error if run in PS ISE
 
 # Set execution policy to allow online PS scripts for this session
+Write-Host 'Setting Execution Policy for Session...' `n
 Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
 
 # Install NuGet Package Manager
+Write-Host 'Installing NuGet Package Manager...' `n
 Install-PackageProvider -Name 'NuGet' -Force
 
 # Set MS Powershell Gallery to trusted source
+Write-Host 'Trusting MS Powershell Gallery...' `n
 Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
 
 # Install and import Windows Update moduel
+Write-Host 'Installing Windows Update Module...' `n
 Install-Module 'PSWindowsUpdate'
 Import-Module 'PSWindowsUpdate'
 
 # Get updates and install
-$updates = Get-WindowsUpdate
 do {
-    Install-WindowsUpdate -AcceptAll -IgnoreReboot
-    $updates = Get-WindowsUpdate
-} until ($updates.count -eq 0)
+    $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)'
+} until ($updateChoice -eq 'y' -Or $updateChoice -eq 'n')
 
-# Add open PS as admin to Shift + Right Click Menu
-reg import './reg-files/Open-PS-As-Admin-Shift-Right-Click.reg'
+if $updateChoice -eq 'y' {
+    $updates = Get-WindowsUpdate
+    do {
+        Install-WindowsUpdate -AcceptAll -IgnoreReboot
+        $updates = Get-WindowsUpdate
+    } until ($updates.count -eq 0)
+}
+
 
 # Set Start Menu Layout to Empty
 Copy-Item './LayoutModification.xml' C:\Users\$env:UserName\AppData\Local\Microsoft\Windows\Shell -Force
@@ -49,23 +57,61 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 # GUI Package Manager
 choco install chocolateygui -y
 # Utility Apps
-choco install 7zip putty winscp linkshellextension notepadplusplus powertoys aida64-extreme lastpass treesizefree gyazo cpu-z -y
-choco bin powertoys lastpass -y
+choco install aida64-extreme
 # MS Office Apps
-choco install office365business -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' -y
-choco bin office365business -y
-# Storage Apps
-choco install dropbox -y
-choco bin dropbox -y
-# Programming Apps
-choco install vscode github-desktop -y
-choco bin vscode github-desktop -y
-# Browsers
-choco install googlechrome firefox -y
-choco bin googlechrome firefox -y
+choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""'
+choco pin office365business -y
 # Media Apps
-choco install vlc spotify audacity adobe-creative-cloud -y
-choco bin spotify adobe-creative-cloud -y
-# Gaming Apps
-choco install steam discord geforce-experience teamspeak uplay discord -y
-choco bin steam discord geforce-experience teamspeak uplay discord -y
+choco install adobe-creative-cloud -y
+choco pin adobe-creative-cloud -y
+
+# Dowload and install MS Store App Sideloader
+$url = 'https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
+$path = './Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
+Invoke-WebRequest -Uri $url -OutFile $path
+Add-AppxPackage -Path $path
+
+# Install PowerShell 7
+winget install 'PowerShell'
+reg import .\reg-files\Add_64-bit_PowerShell_7_Open_here_context_menu_on_64-bit_Windows_10.reg
+
+# Install Other Desktop Apps
+winget install 'Logitech Gaming Hub'
+winget install 'PowerToys'
+winget install 'Visual Studio Code'
+winget install 'Visual Studio Community'
+winget install 'NordVPN'
+winget install 'Notepad++'
+winget install 'Nvidia GeForce Experience'
+winget install 'Plex for Windows'
+winget install 'Python'
+winget install 'Spotify'
+winget install 'Steam'
+winget install 'Google Chrome'
+winget install 'Firefox'
+winget install 'VLC media player'
+winget install 'Teamviewer'
+winget install 'Discord'
+winget install 'Dropbox'
+winget install 'TreeSize Free'
+winget install 'Link Shell Extension'
+winget install 'Audacity'
+winget install 'PuTTY'
+winget install 'CPU-Z'
+winget install '7Zip'
+winget install 'WinSCP'
+winget install 'GitHub Desktop'
+winget install 'Ubisoft Connect'
+winget install 'Teamspeak Client'
+
+# Install MS Store Apps
+winget install 'Windows Terminal'
+winget install 'Ubuntu'
+winget install 'Debian'
+
+# Delete Desktop Shortcuts
+Remove-Item C:\Users\$env:UserName\Desktop\*.lnk -Force
+Remove-Item C:\Users\Public\Desktop\*.lnk -Force
+
+# Enable WSL2
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
