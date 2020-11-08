@@ -2,19 +2,21 @@
 # Need to open PS as admin and Set-Location to script folder
 # Reg import steps will through error if run in PS ISE
 
-#Check if user want full output
-$hideOutput = $True
+#Start Logging
+try{stop-transcript|out-null} catch [System.InvalidOperationException]{}
+Start-Transcript -Path C:\Users\$env:UserName\Desktop\ps-windows-setup-log.txt
 
+#Check if user want full output
 do {
-    $outputChoice = Read-Host -Prompt 'Do you want to show all script output? (y|n)'
+    $outputChoice = Read-Host -Prompt 'Do you want to show all script outputs? (y|n)'
 } until ($outputChoice -eq 'y' -Or $outputChoice -eq 'n')
 
-if ($outputChoice -eq 'y') {$hideOutput = $False} 
+if ($outputChoice -eq 'y') {$Output = 'Out-Default'} else {$Output = 'Out-Null'}
 
 # Check if PS Profile exists and create one if not
 Write-Host 'Checking for or creating PS Profile...' `n
 if (!(Test-Path -Path $Profile)) {
-    New-Item -ItemType File -Path $Profile -Force | if ($hideOutput) {Out-Null}
+    New-Item -ItemType File -Path $Profile -Force | & $output
 }
 
 # Reload profile
@@ -26,7 +28,7 @@ Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
 
 # Install NuGet Package Manager
 Write-Host 'Installing NuGet Package Manager...' `n
-Install-PackageProvider -Name 'NuGet' -Force | if ($hideOutput) {Out-Null}
+Install-PackageProvider -Name 'NuGet' -Force | & $output
 
 # Set MS Powershell Gallery to trusted source
 Write-Host 'Trusting MS Powershell Gallery...' `n
@@ -39,7 +41,6 @@ Import-Module 'PSWindowsUpdate'
 
 # Get updates and install
 do {
-    Write-Host 'If updates are not run most app instals will be skipped.'
     $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)'
 } until ($updateChoice -eq 'y' -Or $updateChoice -eq 'n')
 
@@ -47,7 +48,7 @@ if ($updateChoice -eq 'y') {
     Write-Host `n 'Installing Windows Updates...' `n
     $updates = Get-WindowsUpdate
     do {
-        Install-WindowsUpdate -AcceptAll -IgnoreReboot | if ($hideOutput) {Out-Null}
+        Install-WindowsUpdate -AcceptAll -IgnoreReboot | & $output
         $updates = Get-WindowsUpdate
     } until ($updates.count -eq 0)
 }
@@ -69,79 +70,86 @@ Set-ItemProperty $key 'SearchboxTaskbarMode' 0     # Hide search box on taskbar
 
 Stop-Process -processname explorer
 
+#Check if Windows 10 is 'N' version
+$version = (Get-WmiObject -class Win32_OperatingSystem).Caption
+
+#Install missing media pack
+if ($version -match ' N') {
+    Get-WindowsCapability -Online | Where-Object -Property Name -like "*media*" | Add-WindowsCapability -Online
+}
+
 # Setup Chocolatey package manager 
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')) | & $output
 
 # Install Apps using Chocolatey
 # GUI Package Manager
-choco install chocolateygui -y | if ($hideOutput) {Out-Null}
+Write-Host 'Installing Chocolatey GUI...' `n
+choco install chocolateygui -y | & $output
 # Utility Apps
-choco install aida64-extreme -y | if ($hideOutput) {Out-Null}
+Write-Host 'Installing AIDA64-Extreme...' `n
+choco install aida64-extreme -y | & $output
 # MS Office Apps
-choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' | if ($hideOutput) {Out-Null}
+Write-Host 'Installing MS Office...' `n
+choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' | & $output
 choco pin office365business -y
 # Media Apps
-choco install adobe-creative-cloud -y | if ($hideOutput) {Out-Null}
+Write-Host 'Installing Adobe Creative Cloud...' `n
+choco install adobe-creative-cloud -y | & $output
 choco pin adobe-creative-cloud -y
 
-if ($updateChoice -eq 'y') {
-    # Dowload and install MS Store App Sideloader and dependencies
-    #Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe
-    $url = 'http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/0f3db454-690c-4d14-85cc-8c7c529c1594?P1=1604848847&P2=402&P3=2&P4=A1JUbeLyTt08rRi4BojMKwCpO3%2fMz0iSzapPIWPdF%2fuCBqlL2XTW9Kn9zwSiI5oempt9krCxp96qXBIc3sOmpw%3d%3d'
-    $path = './Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx'
-    Invoke-WebRequest -Uri $url -OutFile $path
-    Add-AppxPackage -Path $path
+# Dowload and install MS Store App Sideloader and dependencies
+Write-Host 'Installing WinGet Package Manager...' `n
+#Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe
+Add-AppxPackage -Path './appx-files/Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx'
 
-    #Microsoft.VCLibs.140.00_8wekyb3d8bbwe
-    $url = 'http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/c25ff6df-4333-4b94-8bbb-e33f0ead8e27?P1=1604848739&P2=402&P3=2&P4=DFY46Xq6ereQw41dA2m1ifIh%2b9jSruvOF1bEdCs7F4DXnOycn%2bZ3rQJpuZiKWu9c%2fZFhVhC4a2OrjaHDzuXFmg%3d%3d'
-    $path = './Microsoft.VCLibs.140.00_8wekyb3d8bbwe.appx'
-    Invoke-WebRequest -Uri $url -OutFile $path
-    Add-AppxPackage -Path $path
+#Microsoft.VCLibs.140.00_8wekyb3d8bbwe
+Add-AppxPackage -Path './appx-files/Microsoft.VCLibs.140.00_14.0.29231.0_x64__8wekyb3d8bbwe.Appx'
 
-    #WinGet Installer
-    $url = 'https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
-    $path = './Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
-    Invoke-WebRequest -Uri $url -OutFile $path
-    Add-AppxPackage -Path $path
+#WinGet Installer
+$url = 'https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
+$path = './Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
+Invoke-WebRequest -Uri $url -OutFile $path
+Add-AppxPackage -Path $path
 
-    # Install PowerShell 7
-    winget install 'PowerShell'
-    reg import .\reg-files\Add_64-bit_PowerShell_7_Open_here_context_menu_on_64-bit_Windows_10.reg
+# Install PowerShell 7
+Write-Host 'Installing Powershell 7...' `n
+winget install 'PowerShell'| & $output
+Write-Host 'Enabling PS7 Menu Actions...' `n
+reg import .\reg-files\Add_64-bit_PowerShell_7_Open_here_context_menu_on_64-bit_Windows_10.reg
 
-    # Install Other Desktop Apps
-    winget install 'Logitech Gaming Hub'
-    winget install 'PowerToys'
-    winget install 'Visual Studio Code'
-    winget install 'Visual Studio Community'
-    winget install 'NordVPN'
-    winget install 'Notepad++'
-    winget install 'Nvidia GeForce Experience'
-    winget install 'Plex for Windows'
-    winget install 'Python'
-    winget install 'Spotify'
-    winget install 'Steam'
-    winget install 'Google Chrome'
-    winget install 'Firefox'
-    winget install 'VLC media player'
-    winget install 'Teamviewer'
-    winget install 'Discord'
-    winget install 'Dropbox'
-    winget install 'TreeSize Free'
-    winget install 'Link Shell Extension'
-    winget install 'Audacity'
-    winget install 'PuTTY'
-    winget install 'CPU-Z'
-    winget install '7Zip'
-    winget install 'WinSCP'
-    winget install 'GitHub Desktop'
-    winget install 'Ubisoft Connect'
-    winget install 'Teamspeak Client'
+# Install Other Desktop Apps
+winget install 'Logitech Gaming Hub' | & $output
+winget install 'PowerToys' | & $output
+winget install 'Visual Studio Code' | & $output
+winget install 'Visual Studio Community' | & $output
+winget install 'NordVPN' | & $output
+winget install 'Notepad++' | & $output
+winget install 'Nvidia GeForce Experience' | & $output
+winget install 'Plex for Windows' | & $output
+winget install 'Python' | & $output
+winget install 'Spotify' | & $output
+winget install 'Steam' | & $output
+winget install 'Google Chrome' | & $output
+winget install 'Firefox' | & $output
+winget install 'VLC media player' | & $output
+winget install 'Teamviewer' | & $output
+winget install 'Discord' | & $output
+winget install 'Dropbox' | & $output
+winget install 'TreeSize Free' | & $output
+winget install 'Link Shell Extension' | & $output
+winget install 'Audacity' | & $output
+winget install 'PuTTY' | & $output
+winget install 'CPU-Z' | & $output
+winget install '7Zip' | & $output
+winget install 'WinSCP' | & $output
+winget install 'GitHub Desktop' | & $output
+winget install 'Ubisoft Connect' | & $output
+winget install 'Teamspeak Client' | & $output
 
-    # Install MS Store Apps
-    winget install 'Windows Terminal'
-    winget install 'Ubuntu'
-    winget install 'Debian'
-}
+# Install MS Store Apps
+winget install 'Windows Terminal' | & $output
+winget install 'Ubuntu' | & $output
+winget install 'Debian' | & $output
 
 # Delete Desktop Shortcuts
 Write-Host 'Removing Desktop shortcuts...' `n
@@ -150,4 +158,7 @@ Remove-Item C:\Users\Public\Desktop\*.lnk -Force
 
 # Enable WSL2
 Write-Host 'Enabling WSL2...' `n
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart | & $output
+
+#Stop Logging
+Stop-Transcript
