@@ -5,7 +5,7 @@
 # Check if PS Profile exists and create one if not
 Write-Host 'Checking for or creating PS Profile...' `n
 if (!(Test-Path -Path $Profile)) {
-    New-Item -ItemType File -Path $Profile -Force
+    New-Item -ItemType File -Path $Profile -Force | Out-Null
 }
 
 # Reload profile
@@ -31,7 +31,7 @@ Import-Module 'PSWindowsUpdate'
 # Get updates and install
 do {
     Write-Host 'If updates are not run most app instals will be skipped.'
-    $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)'
+    $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)' `n
 } until ($updateChoice -eq 'y' -Or $updateChoice -eq 'n')
 
 if ($updateChoice -eq 'y') {
@@ -65,18 +65,31 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 
 # Install Apps using Chocolatey
 # GUI Package Manager
-choco install chocolateygui -y
+choco install chocolateygui -y | Out-Null
 # Utility Apps
-choco install aida64-extreme -y
+choco install aida64-extreme -y | Out-Null
 # MS Office Apps
-choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""'
+choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' | Out-Null
 choco pin office365business -y
 # Media Apps
-choco install adobe-creative-cloud -y
+choco install adobe-creative-cloud -y | Out-Null
 choco pin adobe-creative-cloud -y
 
 if ($updateChoice -eq 'y') {
-    # Dowload and install MS Store App Sideloader
+    # Dowload and install MS Store App Sideloader and dependencies
+    #Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe
+    $url = 'http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/0f3db454-690c-4d14-85cc-8c7c529c1594?P1=1604848847&P2=402&P3=2&P4=A1JUbeLyTt08rRi4BojMKwCpO3%2fMz0iSzapPIWPdF%2fuCBqlL2XTW9Kn9zwSiI5oempt9krCxp96qXBIc3sOmpw%3d%3d'
+    $path = './Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe.appx'
+    Invoke-WebRequest -Uri $url -OutFile $path
+    Add-AppxPackage -Path $path
+
+    #Microsoft.VCLibs.140.00_8wekyb3d8bbwe
+    $url = 'http://tlu.dl.delivery.mp.microsoft.com/filestreamingservice/files/c25ff6df-4333-4b94-8bbb-e33f0ead8e27?P1=1604848739&P2=402&P3=2&P4=DFY46Xq6ereQw41dA2m1ifIh%2b9jSruvOF1bEdCs7F4DXnOycn%2bZ3rQJpuZiKWu9c%2fZFhVhC4a2OrjaHDzuXFmg%3d%3d'
+    $path = './Microsoft.VCLibs.140.00_8wekyb3d8bbwe.appx'
+    Invoke-WebRequest -Uri $url -OutFile $path
+    Add-AppxPackage -Path $path
+
+    #WinGet Installer
     $url = 'https://github.com/microsoft/winget-cli/releases/download/v0.2.2941/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
     $path = './Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
     Invoke-WebRequest -Uri $url -OutFile $path
@@ -122,8 +135,10 @@ if ($updateChoice -eq 'y') {
 }
 
 # Delete Desktop Shortcuts
+Write-Host 'Removing Desktop shortcuts...' `n
 Remove-Item C:\Users\$env:UserName\Desktop\*.lnk -Force
 Remove-Item C:\Users\Public\Desktop\*.lnk -Force
 
 # Enable WSL2
+Write-Host 'Enabling WSL2...' `n
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart

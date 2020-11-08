@@ -9,6 +9,6 @@ How to use:
     3 - Open Edge and download this repo
     4 - Run PS as Admin
     5 - Execute 
-        `set-executionpolicy remotesigned`
+        set-executionpolicy -ExecutionPolicy Bypass -Scope Process -Force
     6 - Run the script
-        `./setup.ps1`
+        ./setup.ps1
