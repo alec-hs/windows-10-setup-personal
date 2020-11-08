@@ -2,10 +2,19 @@
 # Need to open PS as admin and Set-Location to script folder
 # Reg import steps will through error if run in PS ISE
 
+#Check if user want full output
+$hideOutput = $True
+
+do {
+    $outputChoice = Read-Host -Prompt 'Do you want to show all script output? (y|n)'
+} until ($outputChoice -eq 'y' -Or $outputChoice -eq 'n')
+
+if ($outputChoice -eq 'y') {$hideOutput = $False} 
+
 # Check if PS Profile exists and create one if not
 Write-Host 'Checking for or creating PS Profile...' `n
 if (!(Test-Path -Path $Profile)) {
-    New-Item -ItemType File -Path $Profile -Force | Out-Null
+    New-Item -ItemType File -Path $Profile -Force | if ($hideOutput) {Out-Null}
 }
 
 # Reload profile
@@ -17,7 +26,7 @@ Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
 
 # Install NuGet Package Manager
 Write-Host 'Installing NuGet Package Manager...' `n
-Install-PackageProvider -Name 'NuGet' -Force | Out-Null
+Install-PackageProvider -Name 'NuGet' -Force | if ($hideOutput) {Out-Null}
 
 # Set MS Powershell Gallery to trusted source
 Write-Host 'Trusting MS Powershell Gallery...' `n
@@ -31,14 +40,14 @@ Import-Module 'PSWindowsUpdate'
 # Get updates and install
 do {
     Write-Host 'If updates are not run most app instals will be skipped.'
-    $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)' `n
+    $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)'
 } until ($updateChoice -eq 'y' -Or $updateChoice -eq 'n')
 
 if ($updateChoice -eq 'y') {
-    Write-Host 'Installing Windows Updates...' `n
+    Write-Host `n 'Installing Windows Updates...' `n
     $updates = Get-WindowsUpdate
     do {
-        Install-WindowsUpdate -AcceptAll -IgnoreReboot | Out-Null
+        Install-WindowsUpdate -AcceptAll -IgnoreReboot | if ($hideOutput) {Out-Null}
         $updates = Get-WindowsUpdate
     } until ($updates.count -eq 0)
 }
@@ -65,14 +74,14 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 
 # Install Apps using Chocolatey
 # GUI Package Manager
-choco install chocolateygui -y | Out-Null
+choco install chocolateygui -y | if ($hideOutput) {Out-Null}
 # Utility Apps
-choco install aida64-extreme -y | Out-Null
+choco install aida64-extreme -y | if ($hideOutput) {Out-Null}
 # MS Office Apps
-choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' | Out-Null
+choco install office365business -y -params '"/productid:O365HomePremRetail /exclude:""Access OneNote Publisher""' | if ($hideOutput) {Out-Null}
 choco pin office365business -y
 # Media Apps
-choco install adobe-creative-cloud -y | Out-Null
+choco install adobe-creative-cloud -y | if ($hideOutput) {Out-Null}
 choco pin adobe-creative-cloud -y
 
 if ($updateChoice -eq 'y') {
