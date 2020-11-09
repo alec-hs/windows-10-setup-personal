@@ -25,6 +25,14 @@ $newLine = 'Set-Location ' + $currentPath
 New-Item -Path $path -ItemType File -Value $newLine -Force
 Add-Content -Path $path -Value (Get-Content './phase-2.ps1')
 
+#Check if Windows 10 is 'N' version
+$version = (Get-WmiObject -class Win32_OperatingSystem).Caption
+
+#Install missing media pack
+if ($version -match ' N') {
+    Get-WindowsCapability -Online | Where-Object -Property Name -like "*media*" | Add-WindowsCapability -Online
+}
+
 # Get updates and install
 do {
     $updateChoice = Read-Host -Prompt 'Would you like to run updates now? (y|n)'

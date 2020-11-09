@@ -1,4 +1,21 @@
 
+#Check and run as admin
+param([switch]$Elevated)
+
+function Test-Admin {
+    $currentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
+    $currentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+}
+
+if ((Test-Admin) -eq $false)  {
+    if ($elevated) {
+        # tried to elevate, did not work, aborting
+    } else {
+        Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
+    }
+    exit
+}
+
 # Dowload and install MS Store App Sideloader and dependencies
 Write-Host 'Installing WinGet Package Manager...' `n
 #Microsoft.VCLibs.140.00.UWPDesktop_8wekyb3d8bbwe
@@ -66,17 +83,6 @@ Set-ItemProperty $key 'AutoCheckSelect' 1           # Show check boxes in explor
 $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
 Set-ItemProperty $key 'SearchboxTaskbarMode' 0     # Hide search box on taskbar
 
-#Restart explorer
-Stop-Process -processname explorer
-
-#Check if Windows 10 is 'N' version
-$version = (Get-WmiObject -class Win32_OperatingSystem).Caption
-
-#Install missing media pack
-if ($version -match ' N') {
-    Get-WindowsCapability -Online | Where-Object -Property Name -like "*media*" | Add-WindowsCapability -Online
-}
-
 # Setup Chocolatey package manager 
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
@@ -100,3 +106,6 @@ choco pin adobe-creative-cloud -y
 Write-Host 'Removing Desktop shortcuts...' `n
 Remove-Item C:\Users\$env:UserName\Desktop\*.lnk -Force
 Remove-Item C:\Users\Public\Desktop\*.lnk -Force
+
+#Restart explorer
+Stop-Process -processname explorer
