@@ -61,27 +61,27 @@ winget install 'Teamspeak Client'
 # Install MS Store Apps
 Write-Host 'Installing Microsoft Store apps...' `n
 winget install 'Windows Terminal'
-winget install 'Ubuntu'
-winget install 'Debian'
 
-# Enable WSL2
+# Enable WSL2 and install distros
 Write-Host 'Enabling WSL2...' `n
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+winget install 'Ubuntu'
+winget install 'Debian'
 
 # Set Start Menu layout to empty
 Copy-Item './LayoutModification.xml' C:\Users\$env:UserName\AppData\Local\Microsoft\Windows\Shell -Force
 Remove-Item -Force -Recurse -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store'
 
 # Set File Explorer options
-$key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-Set-ItemProperty $key 'Hidden' 1                    # Show hidden file
-Set-ItemProperty $key 'HideFileExt' 0               # Show file extensions
-Set-ItemProperty $key 'ShowCortanaButton' 0         # Hide Cortana button on taskbar
-Set-ItemProperty $key 'LaunchTo' 1                  # Launch Explorer to "This PC"
-Set-ItemProperty $key 'AutoCheckSelect' 1           # Show check boxes in explorer
+#$key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+#Set-ItemProperty $key 'Hidden' 1                    # Show hidden file
+#Set-ItemProperty $key 'HideFileExt' 0               # Show file extensions
+#Set-ItemProperty $key 'ShowCortanaButton' 0         # Hide Cortana button on taskbar
+#Set-ItemProperty $key 'LaunchTo' 1                  # Launch Explorer to "This PC"
+#Set-ItemProperty $key 'AutoCheckSelect' 1           # Show check boxes in explorer
 
-$key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
-Set-ItemProperty $key 'SearchboxTaskbarMode' 0     # Hide search box on taskbar
+#$key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Search'
+#Set-ItemProperty $key 'SearchboxTaskbarMode' 0     # Hide search box on taskbar
 
 # Setup Chocolatey package manager 
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
