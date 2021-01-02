@@ -14,5 +14,5 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 
 # Switch to PS7
 $path = Get-Location
-$launch = 'cmd /c start pwsh -Command { ./phase-1.ps1 ' + $path + '}'
+$launch = 'cmd /c start pwsh -Command ./phase-1.ps1 ' + $path
 Invoke-Expression $launch
