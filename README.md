@@ -1,6 +1,6 @@
 # Windows-10-Setup-Personal
-Scripts to setup Windows 10 PCs.
 
+Scripts to setup Windows 10 PCs.
 
 How to use:
 
@@ -11,4 +11,4 @@ How to use:
     5 - Execute 
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
     6 - Run the script
-        ./setup.ps1
+        ./setup.ps
