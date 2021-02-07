@@ -4,7 +4,9 @@ Scripts to setup Windows 10 PCs.
 
 How to use:
 
-    1 - Install Windows and Setup Account
+    1 - Install Windows 
+    2 - Setup User Account
+    3 - Rename PC to wanted name
     2 - Login
     3 - Open Edge and download this repo
     4 - Run PS as Admin
