@@ -5,17 +5,21 @@ Function Install-LGHub {
     if (!(Test-Path $path)) {
         New-Item $path -ItemType "Directory"
     }
-    Move-Item "$PSScriptRoot\app-files\lghub\*" $path -Force
+    Move-Item ".\app-files\lghub\*" $path -Force
 
     # Manually install Logitech Gaming Hub
     $url = "https://download01.logi.com/web/ftp/pub/techsupport/gaming/lghub_installer.exe"
-    $path = "$PSScriptRoot\lghub-files\lghub_installer.exe"
+    $path = ".\app-files\lghub\lghub_installer.exe"
     Start-BitsTransfer $url $path
-    Start-Process $path -Wait   
+    Start-Process $path -Wait
 }
 
-Function Install-WaveLinks {
-
+Function Install-WaveLink {
+    # Manually install Elgato Wave Link
+    $url = "https://edge.elgato.com/egc/windows/wavelink/1.1.6/WaveLink_1.1.6.2239_x64.msi"
+    $path = ".\app-files\elgato\WaveLink_1.1.6.2239_x64.msi"
+    Start-BitsTransfer $url $path
+    Start-Process $path -Wait
 }
 
 Function Set-PS7Default {
@@ -24,12 +28,104 @@ Function Set-PS7Default {
 }
 
 Function Install-WinGet {
-    Write-Host "Installing WinGet Package Manager..." `n
-    Add-AppxPackage -Path "$PSScriptRoot\appx-files\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
+    Write-Output "Installing WinGet Package Manager..." `n
+    Add-AppxPackage -Path ".\app-files\winget\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
     $url = 'https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
-    $path = "$PSScriptRoot\app-files\winget\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle"
+    $path = ".\app-files\winget\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle"
     Start-BitsTransfer $url $path
     Add-AppxPackage -Path $path
+}
+
+Function Install-Choco {
+    # Setup Chocolatey package manager 
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+}
+
+Function Install-MyAppsChoco {
+    # Update Choco Packages
+    Write-Output "Updating Chocolatey Package List..." `n
+    choco upgrade all -y
+
+    # Install Apps using Chocolatey
+    # GUI Package Manager
+    Write-Output "Installing Chocolatey GUI..." `n
+    choco install chocolateygui -y
+
+    # Utility Apps
+    Write-Output "Installing AIDA64-Extreme..." `n
+    choco install 7zip -y
+    choco install treesizefree -y
+    choco install aida64-extreme -y
+    choco install putty -y
+    choco install LinkShellExtension -y
+    choco install winscp -y
+    choco install cpu-z -y
+    choco install zerotier-one -y
+    choco install crystaldiskinfo -y
+    choco install crystaldiskmark -y
+    choco install scrcpy -y
+    choco install hcloud -y
+    choco install duplicati -y
+
+    # MS Office Apps
+    Write-Output "Installing MS Office..." `n
+    choco install microsoft-office-deployment -y -params '"/64bit /product:HomeBusiness2019Retail /exclude:""Access OneNote Publisher""'
+    choco pin add -n=microsoft-office-deployment
+
+    # Media Apps
+    Write-Output "Installing Adobe Creative Cloud..." `n
+    choco install vlc -y
+    choco install audacity -y
+    choco install spotify -y
+    choco pin add -n=spotify
+    choco install adobe-creative-cloud -y
+    choco pin add -n=adobe-creative-cloud
+
+    # Upgrade Choco Packages
+    Write-Output "Updating Chocolatey Package List..." `n
+    choco upgrade all -y
+}
+
+Function Install-MyAppsWinget {
+    # Install Autoupdating Apps with WinGet
+    Write-Output "Installing desktop apps..." `n
+
+    # Install Utility Apps
+    # -i : interative install for setting options
+    winget install 'PowerToys'
+    winget install 'Powershell' -i
+    winget install 'Windows Terminal'
+    winget install 'Google Chrome'
+    winget install 'NordVPN'
+    winget install 'Teamviewer'
+    winget install 'Dropbox'
+    winget install 'Rufus'
+
+    # Install Gaming Apps
+    winget install 'Nvidia GeForce Experience'
+    winget install 'Steam'
+    winget install 'Ubisoft Connect'
+    winget install 'Streamdeck'
+    winget install 'Logitech Gaming Hub'
+
+    # Install Comms Apps
+    winget install 'Teamspeak Client'
+    winget install 'Discord'
+
+    # Install Dev Apps
+    winget install 'Visual Studio Code (System Installer - x64)' -i
+    winget install 'Visual Studio Community'
+    winget install 'GitHub Desktop'
+    winget install 'Git' -i
+    winget install 'Python' -i
+
+    # Install Media Apps
+    winget install 'Plex For Windows'
+    winget install 'OBS Studio'
+
+    # Install WSL2 Distros
+    winget install 'Ubuntu'
+    winget install 'Debian'
 }
 
 Function Remove-BloatApps {
@@ -38,7 +134,7 @@ Function Remove-BloatApps {
     Set-ItemProperty $key "OemPreInstalledAppsEnabled" 0    # Remove OEM Pre-Installed Apps
 
     # Uninstall MS Apps
-    Write-Host "Uninstalling default Microsoft applications..."
+    Write-Output "Uninstalling default Microsoft applications..."
     Get-AppxPackage "Microsoft.3DBuilder" | Remove-AppxPackage
     Get-AppxPackage "Microsoft.AppConnector" | Remove-AppxPackage
     Get-AppxPackage "Microsoft.BingFinance" | Remove-AppxPackage
@@ -98,7 +194,7 @@ Function Remove-BloatApps {
     Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage # Dependency for microsoft.windowscommunicationsapps, Microsoft.BingWeather
 
     # Remove 3rd Party Applications
-    Write-Host "Uninstalling default third party applications..."
+    Write-Output "Uninstalling default third party applications..."
     Get-AppxPackage "2414FC7A.Viber" | Remove-AppxPackage
     Get-AppxPackage "41038Axilesoft.ACGMediaPlayer" | Remove-AppxPackage
     Get-AppxPackage "46928bounde.EclipseManager" | Remove-AppxPackage

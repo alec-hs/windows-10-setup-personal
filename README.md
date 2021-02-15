@@ -14,3 +14,8 @@ How to use:
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
     6 - Run the script
         ./setup.ps
+
+## Reference
+
+- <https://www.it-admins.com/move-user-documents-and-desktop-to-onedrive/>
+- <https://github.com/Disassembler0/Win10-Initial-Setup-Script>
