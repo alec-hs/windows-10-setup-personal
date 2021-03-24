@@ -19,13 +19,14 @@ Pause
 Set-ExplorerOptions
 Pause
 
-TIME LINE SETTINGS
-ALT TAB Settings
-Powertoys settings save
-dot files
-dot files repo
-scheduled task to commit dot
-gpg key
+#TIMELINE SETTINGS - https://www.majorgeeks.com/content/page/how_to_disable_windows_10_activity_history_permanently.html
+#ALT TAB Settings - https://www.tenforums.com/tutorials/159896-how-change-what-alt-tab-shows-windows-10-a.html
+#Powertoys settings save
+#dot files
+#dot files repo
+#scheduled task to commit dot
+#power automate desktop
+#gpg key
 
 # Hide all Desktop Icons
 Set-DesktopIconsHidden
