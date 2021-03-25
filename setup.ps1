@@ -10,7 +10,7 @@ Start-Transcript -Path ".\setup.log"
 Pause
 
 # Set execution policy to allow online PS scripts for this session
-Write-Output "Setting Execution Policy for Session..." `n
+Write-Output "Setting Execution Policy for Session..." `n `n
 Set-ExecutionPolicy -ExecutionPolicy 'Bypass' -Scope 'Process' -Force
 Pause
 
@@ -20,6 +20,7 @@ Import-Module ".\modules\core-functions.psm1"
 Import-Module ".\modules\computer-functions.psm1"
 Import-Module ".\modules\user-functions.psm1"
 Import-Module ".\modules\app-functions.psm1"
+Import-Module BitsTransfer
 Pause
 
 # Set Networks to Private

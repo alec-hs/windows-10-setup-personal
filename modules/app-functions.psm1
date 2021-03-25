@@ -1,7 +1,6 @@
 Function Install-LGHub {
-    Import-Module BitsTransfer
-    
     # Manually install Logitech Gaming Hub
+    Write-Output "Installing Logitech G HUB..." `n `n
     $url = "https://download01.logi.com/web/ftp/pub/techsupport/gaming/lghub_installer.exe"
     $path = ".\app-files\lghub_installer.exe"
     Start-BitsTransfer $url $path
@@ -10,6 +9,7 @@ Function Install-LGHub {
 
 Function Install-WaveLink {
     # Manually install Elgato Wave Link
+    Write-Output "Elgato Wave Link..." `n `n
     $url = "https://edge.elgato.com/egc/windows/wavelink/1.1.6/WaveLink_1.1.6.2239_x64.msi"
     $path = ".\app-files\WaveLink_1.1.6.2239_x64.msi"
     Start-BitsTransfer $url $path
@@ -18,7 +18,8 @@ Function Install-WaveLink {
 
 
 Function Install-PowerAutomateDesktop {
-    # Manually install Elgato Wave Link
+    # Manually install Power Automate Desktop
+    Write-Output "Installing Power Automate Desktop..." `n `n
     $url = "https://download.microsoft.com/download/b/d/8/bd8409df-7b80-4ef7-89c5-5a7a941a5093/"
     $path = ".\app-files\Setup.Microsoft.PowerAutomateDesktop.exe"
     Start-BitsTransfer $url $path
@@ -26,12 +27,15 @@ Function Install-PowerAutomateDesktop {
 }
 
 Function Set-PS7Default {
+    # 
+    Write-Output "Setting PS7 as Default..." `n `n
     $key = "HKLM:\Software\Classes\Microsoft.PowerShellScript.1\Shell\Open\Command"
     Set-ItemProperty $key '(Default)' '"C:\Program Files\PowerShell\7\pwsh.exe" "%1"'
 }
 
 Function Install-WinGet {
-    Write-Output "Installing WinGet Package Manager..." `n
+    # 
+    Write-Output "Installing WinGet Package Manager..." `n `n
     Add-AppxPackage -Path ".\app-files\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
     $url = 'https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
     $path = ".\app-files\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle"
@@ -40,22 +44,23 @@ Function Install-WinGet {
 }
 
 Function Install-Choco {
-    # Setup Chocolatey package manager 
+    # Setup Chocolatey package manager
+    Write-Output "Installing Chocolatey Package Manager..." `n `n
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
 
 Function Install-MyAppsChoco {
     # Update Choco Packages
-    Write-Output "Updating Chocolatey Package List..." `n
+    Write-Output "Updating Chocolatey Package List..." `n `n
     choco upgrade all -y
 
     # Install Apps using Chocolatey
     # GUI Package Manager
-    Write-Output "Installing Chocolatey GUI..." `n
+    Write-Output "Installing Chocolatey GUI..." `n `n
     choco install chocolateygui -y
 
     # Utility Apps
-    Write-Output "Installing Utility Apps..." `n
+    Write-Output "Installing Utility Apps..." `n `n
     choco install aida64-extreme -y
     choco install scrcpy -y
     choco install hcloud -y
@@ -63,23 +68,25 @@ Function Install-MyAppsChoco {
     choco pin add -n=nordpass
 
     # MS Office Apps
-    Write-Output "Installing MS Office..." `n
+    Write-Output "Installing MS Office..." `n `n
     choco install microsoft-office-deployment -y -params '"/64bit /product:HomeBusiness2019Retail /exclude:""Access OneNote Publisher""'
     choco pin add -n=microsoft-office-deployment
 
     # Media Apps
-    Write-Output "Installing Adobe Creative Cloud..." `n
+    Write-Output "Installing Media Apps..." `n `n
+    choco install spotify -y
+    choco pin add -n=spotify
     choco install adobe-creative-cloud -y
     choco pin add -n=adobe-creative-cloud
 
     # Upgrade Choco Packages
-    Write-Output "Updating Chocolatey Package List..." `n
+    Write-Output "Updating Chocolatey Packages..." `n `n
     choco upgrade all -y
 }
 
 Function Install-MyAppsWinget {
     # Install Autoupdating Apps with WinGet
-    Write-Output "Installing desktop apps..." `n
+    Write-Output "Installing desktop apps..." `n `n
 
     # Install Utility Apps
     # -i : interative install for setting options
@@ -126,15 +133,7 @@ Function Install-MyAppsWinget {
     winget install 'OBS Studio'
     winget install 'Audacity'
     winget install 'VLC'
-    winget install 'Spotify'
     winget install 'AdobeAcrobatReaderDC'
-
-    # Install WSL2 Distros
-    winget install 'Ubuntu'
-    winget install 'Debian'
-
-    # Upgrade All Apps
-    winget upgrade --all
 }
 
 Function Remove-BloatApps {

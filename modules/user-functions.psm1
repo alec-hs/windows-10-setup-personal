@@ -32,12 +32,13 @@ Function Remove-StartMenuItems {
 # Remove Desktop Shortcuts
 Function Remove-DesktopShortcuts {
     # check paths first
-    Write-Output "Removing Desktop shortcuts..." `n
-    try {
-        Remove-Item "C:\Users\$env:UserName\Desktop\*.lnk" -Force
-        Remove-Item "C:\Users\Public\Desktop\*.lnk" -Force
-        Remove-Item "C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk" -Force
-    } finally {}
+    Write-Output "Removing Desktop shortcuts..." `n `n
+    $paths = @("C:\Users\$env:UserName\Desktop\*.lnk","C:\Users\Public\Desktop\*.lnk","C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk")
+    $paths.ForEach({
+        if (!(Test-Path $_)) {
+            Remove-Item $_ -Force
+        }
+    })
 }
 
 # Set Explorer Options in Registry

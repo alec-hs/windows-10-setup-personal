@@ -12,6 +12,7 @@ Function Restart-Computer {
 
 # Reload Path
 Function Reset-Path {
+    Write-Output "Reloading Path Variable..." `n `n
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") 
 }
 
@@ -19,6 +20,7 @@ Function Reset-Path {
 Function Remove-ScriptFiles {
     Write-Output "Removing files related to this script..."
     Remove-Item .\app-files -Recurse -Force
+    Remove-Item .\modules -Recurse -Force
     Remove-Item .\README.md -Force
     Remove-Item .\setup.ps1 -Force
 }
