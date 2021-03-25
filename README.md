@@ -13,7 +13,7 @@ How to use:
     5 - Execute 
         Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
     6 - Run the script
-        ./setup.ps
+        ./setup.ps1
 
 ## Reference
 

@@ -6,7 +6,7 @@ Function Set-NetworkTypes {
             $name = $conn.Name
             $confirm = Read-Host "Would you like to switch connection - $name - to Private? (y | n)"
             if ($confirm -eq "y") {
-                Set-NetConnectionProfile -Name $name -NetworkCategory Public
+                Set-NetConnectionProfile -Name $name -NetworkCategory Private
             }
         }
     }

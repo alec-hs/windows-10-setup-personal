@@ -1,13 +1,16 @@
+# Restart Windows Explorer Process
 Function Restart-Explorer {
     Write-Output "Restarting Explorer process..."
     Stop-Process -processname explorer
 }
 
+# Restart Computer
 Function Restart-Computer {
     Write-Output "Restarting PC..."
     shutdown -r -t 0 
 }
 
+# Reload Path
 Function Reset-Path {
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") 
 }
@@ -20,6 +23,7 @@ Function Remove-ScriptFiles {
     Remove-Item .\setup.ps1 -Force
 }
 
+# End Script
 Function Show-ScriptEnding {
     # Notify User
     Write-Output "`n### Script Complete ###`n`nLog can be found here: .\setup.log`n`n### PC will now reboot ###"

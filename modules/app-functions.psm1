@@ -1,25 +1,26 @@
 Function Install-LGHub {
     Import-Module BitsTransfer
-    # Import Logitech Profiles
-    $path = "C:\Users\$env:UserName\AppData\Local\LGHUB"
-    if (!(Test-Path $path)) {
-        New-Item $path -ItemType "Directory"
-    }
-    Move-Item ".\app-files\lghub\*" $path -Force
-
+    
     # Manually install Logitech Gaming Hub
     $url = "https://download01.logi.com/web/ftp/pub/techsupport/gaming/lghub_installer.exe"
-    $path = ".\app-files\lghub\lghub_installer.exe"
+    $path = ".\app-files\lghub_installer.exe"
     Start-BitsTransfer $url $path
     Start-Process $path -Wait
 }
 
 Function Install-WaveLink {
     # Manually install Elgato Wave Link
-    # Needs to check and create path for elgato
-
     $url = "https://edge.elgato.com/egc/windows/wavelink/1.1.6/WaveLink_1.1.6.2239_x64.msi"
-    $path = ".\app-files\elgato\WaveLink_1.1.6.2239_x64.msi"
+    $path = ".\app-files\WaveLink_1.1.6.2239_x64.msi"
+    Start-BitsTransfer $url $path
+    Start-Process $path -Wait
+}
+
+
+Function Install-PowerAutomateDesktop {
+    # Manually install Elgato Wave Link
+    $url = "https://download.microsoft.com/download/b/d/8/bd8409df-7b80-4ef7-89c5-5a7a941a5093/"
+    $path = ".\app-files\Setup.Microsoft.PowerAutomateDesktop.exe"
     Start-BitsTransfer $url $path
     Start-Process $path -Wait
 }
@@ -31,9 +32,9 @@ Function Set-PS7Default {
 
 Function Install-WinGet {
     Write-Output "Installing WinGet Package Manager..." `n
-    Add-AppxPackage -Path ".\app-files\winget\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
+    Add-AppxPackage -Path ".\app-files\Microsoft.VCLibs.140.00.UWPDesktop_14.0.29231.0_x64__8wekyb3d8bbwe.Appx"
     $url = 'https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
-    $path = ".\app-files\winget\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle"
+    $path = ".\app-files\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle"
     Start-BitsTransfer $url $path
     Add-AppxPackage -Path $path
 }
@@ -58,6 +59,8 @@ Function Install-MyAppsChoco {
     choco install aida64-extreme -y
     choco install scrcpy -y
     choco install hcloud -y
+    choco install nordpass -y
+    choco pin add -n=nordpass
 
     # MS Office Apps
     Write-Output "Installing MS Office..." `n
@@ -104,7 +107,7 @@ Function Install-MyAppsWinget {
     winget install 'Steam'
     winget install 'Ubisoft Connect'
     winget install 'Streamdeck'
-    winget install 'Logitech Gaming Hub'
+    #winget install 'Logitech Gaming Hub'
 
     # Install Comms Apps
     winget install 'Teamspeak Client'
@@ -129,6 +132,9 @@ Function Install-MyAppsWinget {
     # Install WSL2 Distros
     winget install 'Ubuntu'
     winget install 'Debian'
+
+    # Upgrade All Apps
+    winget upgrade --all
 }
 
 Function Remove-BloatApps {

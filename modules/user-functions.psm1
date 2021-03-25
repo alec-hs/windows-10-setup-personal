@@ -31,12 +31,16 @@ Function Remove-StartMenuItems {
 
 # Remove Desktop Shortcuts
 Function Remove-DesktopShortcuts {
+    # check paths first
     Write-Output "Removing Desktop shortcuts..." `n
-    Remove-Item "C:\Users\$env:UserName\Desktop\*.lnk" -Force
-    Remove-Item "C:\Users\Public\Desktop\*.lnk" -Force
-    Remove-Item "C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk" -Force
+    try {
+        Remove-Item "C:\Users\$env:UserName\Desktop\*.lnk" -Force
+        Remove-Item "C:\Users\Public\Desktop\*.lnk" -Force
+        Remove-Item "C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk" -Force
+    } finally {}
 }
 
+# Set Explorer Options in Registry
 Function Set-ExplorerOptions {
     Write-Output "Setting File Explorer Options..."
     $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"

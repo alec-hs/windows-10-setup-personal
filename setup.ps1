@@ -1,3 +1,10 @@
+## TODO ##
+#Powertoys settings save
+#dot files
+#dot files repo
+#scheduled task to commit dot
+#gpg key
+
 # Start Transcript
 Start-Transcript -Path ".\setup.log"
 Pause
@@ -22,13 +29,6 @@ Pause
 # Set File Explorer options
 Set-ExplorerOptions
 Pause
-
-#Powertoys settings save
-#dot files
-#dot files repo
-#scheduled task to commit dot
-#power automate desktop
-#gpg key
 
 # Hide all Desktop Icons
 Set-DesktopIconsHidden
@@ -76,6 +76,10 @@ Pause
 
 # Install Elgato Wave Link
 Install-WaveLink
+Pause
+
+# Install Power Automate Desktop
+Install-PowerAutomateDesktop
 Pause
 
 # Enable Windows Features
