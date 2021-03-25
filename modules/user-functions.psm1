@@ -47,6 +47,7 @@ Function Set-ExplorerOptions {
     Set-ItemProperty $key "AutoCheckSelect" 1               # Show check boxes in explorer
     Set-ItemProperty $key "MMTaskbarMode" 2                 # Task bar icon on on screen where open
     Set-ItemProperty $key "DontPrettyPath" 1                # Keep user path case
+    Set-ItemProperty $key "MultiTaskingAltTabFilter" 3      # Alt Tab to Windows only, no Edge Tabs
 
     $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"
     Set-ItemProperty $key "SearchboxTaskbarMode" 0          # Hide search box on taskbar
@@ -57,6 +58,9 @@ Function Set-ExplorerOptions {
 
     $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     Set-ItemProperty $key "HwSchMode" 1                     # Turn on GPU Scheduling
+
+    $key = "HKLM:\Software\Policies\Microsoft\Windows\System"
+    Set-ItemProperty $key "PublishUserActivities" 0         # Disables Activity History
 
     $key = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-ItemProperty $key "HideSCAMeetNow" 1                # Hide "Meet Now" option on taskbar

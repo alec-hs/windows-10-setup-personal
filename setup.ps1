@@ -4,7 +4,7 @@ Pause
 
 # Set execution policy to allow online PS scripts for this session
 Write-Output "Setting Execution Policy for Session..." `n
-Set-ExecutionPolicy -ExecutionPolicy 'RemoteSigned' -Scope 'Process' -Force
+Set-ExecutionPolicy -ExecutionPolicy 'Bypass' -Scope 'Process' -Force
 Pause
 
 # Import Module Files
@@ -15,12 +15,14 @@ Import-Module ".\modules\user-functions.psm1"
 Import-Module ".\modules\app-functions.psm1"
 Pause
 
+# Set Networks to Private
+Set-NetworkTypes
+Pause
+
 # Set File Explorer options
 Set-ExplorerOptions
 Pause
 
-#TIMELINE SETTINGS - https://www.majorgeeks.com/content/page/how_to_disable_windows_10_activity_history_permanently.html
-#ALT TAB Settings - https://www.tenforums.com/tutorials/159896-how-change-what-alt-tab-shows-windows-10-a.html
 #Powertoys settings save
 #dot files
 #dot files repo
@@ -57,7 +59,7 @@ Install-WinGet
 Pause
 
 # Install My Apps with Winget
-#Install-MyAppsWinget
+Install-MyAppsWinget
 Pause
 
 # Install Choco
@@ -65,7 +67,7 @@ Install-Choco
 Pause
 
 # Install My Apps with Choclatey
-#Install-MyAppsChoco
+Install-MyAppsChoco
 Pause
 
 # Install Logitech Gaming Hub

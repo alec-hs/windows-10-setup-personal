@@ -16,6 +16,8 @@ Function Install-LGHub {
 
 Function Install-WaveLink {
     # Manually install Elgato Wave Link
+    # Needs to check and create path for elgato
+
     $url = "https://edge.elgato.com/egc/windows/wavelink/1.1.6/WaveLink_1.1.6.2239_x64.msi"
     $path = ".\app-files\elgato\WaveLink_1.1.6.2239_x64.msi"
     Start-BitsTransfer $url $path
@@ -52,20 +54,10 @@ Function Install-MyAppsChoco {
     choco install chocolateygui -y
 
     # Utility Apps
-    Write-Output "Installing AIDA64-Extreme..." `n
-    choco install 7zip -y
-    choco install treesizefree -y
+    Write-Output "Installing Utility Apps..." `n
     choco install aida64-extreme -y
-    choco install putty -y
-    choco install LinkShellExtension -y
-    choco install winscp -y
-    choco install cpu-z -y
-    choco install zerotier-one -y
-    choco install crystaldiskinfo -y
-    choco install crystaldiskmark -y
     choco install scrcpy -y
     choco install hcloud -y
-    choco install duplicati -y
 
     # MS Office Apps
     Write-Output "Installing MS Office..." `n
@@ -74,10 +66,6 @@ Function Install-MyAppsChoco {
 
     # Media Apps
     Write-Output "Installing Adobe Creative Cloud..." `n
-    choco install vlc -y
-    choco install audacity -y
-    choco install spotify -y
-    choco pin add -n=spotify
     choco install adobe-creative-cloud -y
     choco pin add -n=adobe-creative-cloud
 
@@ -92,7 +80,17 @@ Function Install-MyAppsWinget {
 
     # Install Utility Apps
     # -i : interative install for setting options
+    winget install 'Edge'
     winget install 'PowerToys'
+    winget install '7zip'
+    winget install 'TreeSizeFree'
+    winget install 'PuTTY'
+    winget install 'LinkShellExtension'
+    winget install 'WinSCP'
+    winget install 'CPU-Z'
+    winget install 'zerotier'
+    winget install 'CrystalDiskInfo'
+    winget install 'CrystalDiskMark'
     winget install 'Powershell' -i
     winget install 'Windows Terminal'
     winget install 'Google Chrome'
@@ -118,10 +116,15 @@ Function Install-MyAppsWinget {
     winget install 'GitHub Desktop'
     winget install 'Git' -i
     winget install 'Python' -i
+    winget install 'AzureDataStudio'
 
     # Install Media Apps
     winget install 'Plex For Windows'
     winget install 'OBS Studio'
+    winget install 'Audacity'
+    winget install 'VLC'
+    winget install 'Spotify'
+    winget install 'AdobeAcrobatReaderDC'
 
     # Install WSL2 Distros
     winget install 'Ubuntu'
