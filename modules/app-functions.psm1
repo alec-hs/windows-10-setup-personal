@@ -119,6 +119,7 @@ Function Install-MyAppsWinget {
     winget install 'Git' -i
     winget install 'Python' -i
     winget install 'AzureDataStudio'
+    winget install 'AWSCLI'
 
     # Install Media Apps
     winget install 'Plex For Windows'
