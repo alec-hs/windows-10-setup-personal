@@ -48,13 +48,13 @@ Remove-BloatApps
 Install-WinGet
 
 # Install My Apps with Winget
-#Install-MyAppsWinget
+Install-MyAppsWinget
 
 # Install Choco
 Install-Choco
 
 # Install My Apps with Choclatey
-#Install-MyAppsChoco
+Install-MyAppsChoco
 
 # Install Logitech Gaming Hub
 Install-LGHub

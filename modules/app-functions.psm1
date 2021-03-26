@@ -54,6 +54,7 @@ Function Install-MyAppsChoco {
     choco install aida64-extreme -y
     choco install scrcpy -y
     choco install hcloud -y
+    choco install evga-precision-x1 -y
     choco install nordpass -y
     choco pin add -n=nordpass
 
@@ -98,6 +99,7 @@ Function Install-MyAppsWinget {
     winget install 'Teamviewer'
     winget install 'Dropbox'
     winget install 'Rufus'
+    winget install 'Slack'
 
     # Install Gaming Apps
     winget install 'Nvidia GeForce Experience'
