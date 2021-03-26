@@ -32,7 +32,7 @@ Function Remove-StartMenuItems {
 # Remove Desktop Shortcuts
 Function Remove-DesktopShortcuts {
     # check paths first
-    Write-Output "Removing Desktop shortcuts..." `n `n
+    Write-Output "Removing Desktop shortcuts..." `n
     $paths = @("C:\Users\$env:UserName\Desktop\*.lnk","C:\Users\Public\Desktop\*.lnk","C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk")
     $paths.ForEach({
         if (!(Test-Path $_)) {

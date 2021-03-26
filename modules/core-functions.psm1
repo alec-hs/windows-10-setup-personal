@@ -12,7 +12,7 @@ Function Restart-Computer {
 
 # Reload Path
 Function Reset-Path {
-    Write-Output "Reloading Path Variable..." `n `n
+    Write-Output "Reloading Path Variable..." `n
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") 
 }
 
@@ -28,6 +28,6 @@ Function Remove-ScriptFiles {
 # End Script
 Function Show-ScriptEnding {
     # Notify User
-    Write-Output "`n### Script Complete ###`n`nLog can be found here: .\setup.log`n`n### PC will now reboot ###"
+    Write-Output " `n### Script Complete ###`n`nLog can be found here: .\setup.log`n`n### PC will now reboot ###"
     Pause
 } 
