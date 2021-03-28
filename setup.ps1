@@ -2,8 +2,10 @@
 #Powertoys settings save
 #dot files
 #dot files repo
+#
 #scheduled task to commit dot
 #gpg key
+#nordpass, spotify, adobe, teamviewer all fail checksums
 
 # Start Transcript
 Start-Transcript -Path ".\setup.log"

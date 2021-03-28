@@ -55,20 +55,11 @@ Function Install-MyAppsChoco {
     choco install scrcpy -y
     choco install hcloud -y
     choco install evga-precision-x1 -y
-    choco install nordpass -y
-    choco pin add -n=nordpass
 
     # MS Office Apps
     Write-Output "Installing MS Office..." `n
     choco install microsoft-office-deployment -y -params '"/64bit /product:HomeBusiness2019Retail /exclude:""Access OneNote Publisher""'
     choco pin add -n=microsoft-office-deployment
-
-    # Media Apps
-    Write-Output "Installing Media Apps..." `n
-    choco install spotify -y
-    choco pin add -n=spotify
-    choco install adobe-creative-cloud -y
-    choco pin add -n=adobe-creative-cloud
 
     # Upgrade Choco Packages
     Write-Output "Updating Chocolatey Packages..." `n
@@ -96,7 +87,6 @@ Function Install-MyAppsWinget {
     winget install 'Windows Terminal'
     winget install 'Google Chrome'
     winget install 'NordVPN'
-    winget install 'Teamviewer'
     winget install 'Dropbox'
     winget install 'Rufus'
     winget install 'Slack'
@@ -192,7 +182,7 @@ Function Remove-BloatApps {
     Get-AppxPackage "Microsoft.WinJS.2.0" | Remove-AppxPackage
     Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
     Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
-    Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage # Dependency for microsoft.windowscommunicationsapps, Microsoft.BingWeather
+    Get-AppxPackage "Microsoft.Advertising.Xaml" | Remove-AppxPackage
 
     # Remove 3rd Party Applications
     Write-Output "Uninstalling default third party applications..."
