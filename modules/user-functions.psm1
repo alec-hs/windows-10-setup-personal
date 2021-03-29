@@ -35,7 +35,7 @@ Function Remove-DesktopShortcuts {
     Write-Output "Removing Desktop shortcuts..." `n
     $paths = @("C:\Users\$env:UserName\Desktop\*.lnk","C:\Users\Public\Desktop\*.lnk","C:\Users\$env:UserName\OneDrive\$env:ComputerName\Desktop\*.lnk")
     $paths.ForEach({
-        if (!(Test-Path $_)) {
+        if (Test-Path $_) {
             Remove-Item $_ -Force
         }
     })

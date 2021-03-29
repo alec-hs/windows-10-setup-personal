@@ -9,9 +9,26 @@ Function Install-LGHub {
 
 Function Install-WaveLink {
     # Manually install Elgato Wave Link
-    Write-Output "Elgato Wave Link..." `n
+    Write-Output "Installing Elgato Wave Link..." `n
     $url = "https://edge.elgato.com/egc/windows/wavelink/1.1.6/WaveLink_1.1.6.2239_x64.msi"
     $path = ".\app-files\WaveLink_1.1.6.2239_x64.msi"
+    Start-BitsTransfer $url $path
+    Start-Process $path -Wait
+}
+Function Install-Gyazo {
+    # Manually install Gyazo
+    Write-Output "Installing Gyazo..." `n
+    $url = "https://files.gyazo.com/setup/Gyazo-4.1.5.exe"
+    $path = ".\app-files\Gyazo-4.1.5.exe"
+    Start-BitsTransfer $url $path
+    Start-Process $path -Wait
+}
+
+Function Install-NordPass {
+    # Manually install NordPass
+    Write-Output "Installing NordPass..." `n
+    $url = "https://downloads.npass.app/windows/NordPassSetup.exe"
+    $path = ".\app-files\NordPassSetup.exe"
     Start-BitsTransfer $url $path
     Start-Process $path -Wait
 }

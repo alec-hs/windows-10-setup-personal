@@ -64,6 +64,12 @@ Install-LGHub
 # Install Elgato Wave Link
 Install-WaveLink
 
+# Install Gyazo
+Install-Gyazo
+
+# Install NordPass
+Install-NordPass
+
 # Enable Windows Features
 Enable-HyperV
 Enable-AppGuard
