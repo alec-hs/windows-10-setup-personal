@@ -33,6 +33,28 @@ Function Install-NordPass {
     Start-Process $path -Wait
 }
 
+Function Install-ChoEazyCopy {
+    # Manually install ChoEazyCopy
+    Write-Output "Installing ChoEazyCopy..." `n
+    $url = "https://github.com/Cinchoo/ChoEazyCopy/releases/latest/download/ChoEazyCopy.zip"
+    $path = ".\app-files\ChoEazyCopy.zip"
+    Start-BitsTransfer $url $path
+    $installPath = "C:\Tools\"
+    if (!(Test-Path $installPath)) {
+        New-Item -ItemType Directory -Path $installPath -Force
+    }
+    Expand-Archive -LiteralPath $path -DestinationPath "$installPath\ChoEazyCopy"
+}
+
+Function Install-RyzenMaster {
+    # Manually install RyzenMaster
+    Write-Output "Installing RyzenMaster..." `n
+    $url = "https://download.amd.com/Desktop/AMD-Ryzen-Master.exe"
+    $path = ".\app-files\AMD-Ryzen-Master.exe"
+    Start-BitsTransfer $url $path
+    Start-Process $path -Wait
+}
+
 Function Set-PS7Default {
     # Set Powershell 7 to Default
     Write-Output "Setting PS7 as Default..." `n
@@ -72,6 +94,7 @@ Function Install-MyAppsChoco {
     choco install scrcpy -y
     choco install hcloud -y
     choco install evga-precision-x1 -y
+    choco install amd-ryzen-chipset -y
 
     # MS Office Apps
     Write-Output "Installing MS Office..." `n

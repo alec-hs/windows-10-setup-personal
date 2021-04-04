@@ -1,8 +1,6 @@
 ## TODO ##
-#Powertoys settings save
 #dot files
 #dot files repo
-#
 #scheduled task to commit dot
 #gpg key
 #nordpass, spotify, adobe, teamviewer all fail checksums
@@ -69,6 +67,12 @@ Install-Gyazo
 
 # Install NordPass
 Install-NordPass
+
+# Install ChoEazy
+Install-ChoEazyCopy
+
+# Install Ryzen Master
+Install-RyzenMaster
 
 # Enable Windows Features
 Enable-HyperV

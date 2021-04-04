@@ -64,11 +64,16 @@ Function Set-ExplorerOptions {
     $key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
     Set-ItemProperty $key "HwSchMode" 1                     # Turn on GPU Scheduling
 
+    $key = "HKCU:\Control Panel\Mouse"
+    Set-ItemProperty $key "MouseSpeed" 0                    # Disable Mouse Acceleration
+    Set-ItemProperty $key "MouseThreshold1" 0               # 
+    Set-ItemProperty $key "MouseThreshold2" 0               # 
+
     $key = "HKLM:\Software\Policies\Microsoft\Windows\System"
     Set-ItemProperty $key "PublishUserActivities" 0         # Disables Activity History
 
     $key = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-    Set-ItemProperty $key "HideSCAMeetNow" 1                # Hide "Meet Now" option on taskbar
+    Set-ItemProperty $key "HideSCAMeetNow" 1                # Hide "Meet Now" option on taskbar    
 }
 
 # Hide all icons from desktop
