@@ -112,12 +112,12 @@ Function Install-MyAppsWinget {
 
     # Install Utility Apps
     # -i : interative install for setting options
-    winget install 'Edge'
+    winget install 'Microsoft Edge'
     winget install 'PowerToys'
     winget install '7zip'
-    winget install 'TreeSizeFree'
+    winget install 'TreeSize Free'
     winget install 'PuTTY'
-    winget install 'LinkShellExtension'
+    winget install 'Link Shell Extension'
     winget install 'WinSCP'
     winget install 'CPU-Z'
     winget install 'zerotier'
@@ -136,7 +136,6 @@ Function Install-MyAppsWinget {
     winget install 'Steam'
     winget install 'Ubisoft Connect'
     winget install 'Streamdeck'
-    #winget install 'Logitech Gaming Hub'
 
     # Install Comms Apps
     winget install 'Teamspeak Client'
@@ -149,14 +148,14 @@ Function Install-MyAppsWinget {
     winget install 'Git' -i
     winget install 'Python' -i
     winget install 'AzureDataStudio'
-    winget install 'AWSCLI'
+    winget install 'Amazon.AWSCLI'
 
     # Install Media Apps
     winget install 'Plex For Windows'
     winget install 'OBS Studio'
     winget install 'Audacity'
     winget install 'VLC'
-    winget install 'AdobeAcrobatReaderDC'
+    winget install 'Adobe.AdobeAcrobatReaderDC'
 }
 
 Function Remove-BloatApps {
@@ -265,7 +264,6 @@ Function Remove-BloatApps {
     Get-AppxPackage "Nordcurrent.CookingFever" | Remove-AppxPackage
     Get-AppxPackage "PandoraMediaInc.29680B314EFC2" | Remove-AppxPackage
     Get-AppxPackage "PricelinePartnerNetwork.Booking.comBigsavingsonhot" | Remove-AppxPackage
-    Get-AppxPackage "SpotifyAB.SpotifyMusic" | Remove-AppxPackage
     Get-AppxPackage "ThumbmunkeysLtd.PhototasticCollage" | Remove-AppxPackage
     Get-AppxPackage "WinZipComputing.WinZipUniversal" | Remove-AppxPackage
     Get-AppxPackage "XINGAG.XING" | Remove-AppxPackage
