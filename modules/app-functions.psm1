@@ -144,8 +144,9 @@ Function Install-MyAppsWinget {
     # Install Dev Apps
     winget install 'Visual Studio Code (System Installer - x64)' -i
     winget install 'Visual Studio Community'
-    winget install 'GitHub Desktop'
     winget install 'Git' -i
+    winget install 'gpg4win'
+    winget install 'GitHub Desktop'
     winget install 'Python' -i
     winget install 'AzureDataStudio'
     winget install 'Amazon.AWSCLI'

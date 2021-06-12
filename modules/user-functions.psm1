@@ -86,3 +86,10 @@ Function Set-DesktopIconsHidden {
 Function Move-HomeFolders {
    
 }
+
+# Create additional folders
+Function Add-AdditionalFolders {
+    New-Item -Path "C:\" -Name "Source" -ItemType "Directory"
+    New-Item -Path "C:\" -Name "Temp" -ItemType "Directory"
+    New-Item -Path "C:\" -Name "Tools" -ItemType "Directory"
+}

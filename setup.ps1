@@ -20,6 +20,9 @@ Import-Module ".\modules\user-functions.psm1"
 Import-Module ".\modules\app-functions.psm1"
 Import-Module BitsTransfer
 
+# Create some folders I use
+Add-AdditionalFolders
+
 # Set Networks to Private
 Set-NetworkTypes
 
